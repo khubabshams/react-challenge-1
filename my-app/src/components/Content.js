@@ -22,11 +22,11 @@ export class Content extends Component {
 
     render() {
         return (
-            <div className='css.Content'>
-                <div className='css.TitleBar'>
+            <div className={css.Content}>
+                <div className={css.TitleBar}>
                     <h1>My Photos</h1>
                 </div>
-                <div className='css.SearchResults'>
+                <div className={css.SearchResults}>
                     {
                     this.state.isLoaded? 
                     <PostItem posts={savedPosts} />: 
