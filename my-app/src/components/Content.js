@@ -5,13 +5,14 @@ import PostItem from './PostItem'
 import Loader from './Loader'
 
 export default function Content() {
-    const [posts, filterPosts] = useState(savedPosts)
+    const [posts, filterPosts] = useState([])
     const [searchTerm, updateSearchTerm] = useState("")
     const [isLoaded, updateIsLoaded] = useState(false)
 
     useEffect(() => {
         setTimeout(() => {
             updateIsLoaded(true)
+            filterPosts(savedPosts)
         }, 1000)
     }, []);
 
