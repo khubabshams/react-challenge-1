@@ -13,7 +13,7 @@ export default function Content() {
         setTimeout(() => {
             updateIsLoaded(true)
         }, 1000)
-    });
+    }, []);
 
     const searchPosts = (event) => {
         const postName = event.target.value.toLowerCase()
