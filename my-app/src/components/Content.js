@@ -1,59 +1,49 @@
 import React, { Component } from 'react'
+import { useState } from 'react'
 import css from './css/Content.module.css'
 import { savedPosts } from "../posts.json"
 import PostItem from './PostItem'
 import Loader from './Loader'
 
-export class Content extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            isLoaded: false,
-            posts: []
-        }
-    }
+export default function Content() {
+    const [posts, filterPosts] = useState(savedPosts)
+    const [searchTerm, updateSearchTerm] = useState("")
+    const isLoaded = true
 
-    componentDidMount(){
-        setTimeout(() => {
-            this.setState(()=>({
-                isLoaded: true,
-                posts: savedPosts
-            }))
-        }, 2000);
-    }
-
-    searchPosts = (event) => {
+    const searchPosts = (event) => {
         const postName = event.target.value.toLowerCase()
-        this.setState(()=>({
-            posts: savedPosts.filter((post) => post.name.toLowerCase().includes(postName))
-        }))
+        const searchedPosts = savedPosts.filter((post) => post.name.toLowerCase().includes(postName))
+        return filterPosts(searchedPosts)
     }
 
-    render() {
-        return (
-            <div className={css.Content}>
-                <div className={css.TitleBar}>
-                    <h1>My Photos</h1>
-                    <form>
-                        <lablel htmlFor='search'>Search:</lablel>
-                        <input 
-                        name='searchInput' 
+    const submitSearch = (event) => {
+        event.preventDefault()
+        updateSearchTerm(`Search Results for: ${event.target.searchInput.value}`)
+        console.log(event.target.searchInput.value)
+    }
+
+    return (
+        <div className={css.Content}>
+            <div className={css.TitleBar}>
+                <h1>My Photos</h1>
+                { searchTerm? <p>{searchTerm}</p>: '' }
+                <form onSubmit={submitSearch}>
+                    <label htmlFor='search'>Search:</label>
+                    <input
+                        name='searchInput'
                         id='searchInput'
-                        onChange={(event) => this.searchPosts(event)} />
-                    </form>
-                    <h4>posts found: {this.state.posts.length}</h4>
-                </div>
-                <div className={css.SearchResults}>
-                    {
-                    this.state.isLoaded? 
-                    <PostItem posts={this.state.posts} />: 
-                    <Loader/>
-                    }
-                </div>
-                
+                        onChange={searchPosts}/>
+                </form>
+                <h4>posts found: {posts.length}</h4>
             </div>
-        )
-    }
-}
+            <div className={css.SearchResults}>
+                {
+                    isLoaded ?
+                        <PostItem posts={posts} /> :
+                        <Loader />
+                }
+            </div>
 
-export default Content
+        </div>
+    )
+}
