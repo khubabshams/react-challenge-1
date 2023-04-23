@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 
 function PostItem(props) {
     return props.posts.map(post => {
-        const { title, name, image, description } = post
+        const { id, type, user, webformatURL, tags } = post
         return (
-            <div className='css.SearchItem' key={post.title}>
-                <p>{title}</p>
-                <p>{name}</p>
-                <img src={image} />
-                <p>{description}</p>
+            <div className='css.SearchItem' key={id}>
+                <p>Artwork Type: {type}</p>
+                <p>Artist: {user}</p>
+                <img src={webformatURL} />
+                <p>Tags: {tags}</p>
             </div>
         )
     })

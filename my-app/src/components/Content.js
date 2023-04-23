@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import css from './css/Content.module.css'
-import { savedPosts } from "../posts.json"
 import PostItem from './PostItem'
 import Loader from './Loader'
+import axios from 'axios'
+import API_KEY from '../secret.js'
 
 export default function Content() {
     const [posts, filterPosts] = useState([])
+    const [savedPosts, filterSavedPosts] = useState([])
     const [searchTerm, updateSearchTerm] = useState("")
     const [isLoaded, updateIsLoaded] = useState(false)
 
+    const fetchImages = async () => {
+        const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&per_page=100&safesearch=true&editors_choice=true&orientation=horizontal`);
+        const fetchedPosts = response.data.hits;
+
+        updateIsLoaded(true)
+        filterPosts(fetchedPosts)
+        filterSavedPosts(fetchedPosts)
+    }
+
     useEffect(() => {
-        setTimeout(() => {
-            updateIsLoaded(true)
-            filterPosts(savedPosts)
-        }, 1000)
+        fetchImages();
     }, []);
 
     const searchPosts = (event) => {
-        const postName = event.target.value.toLowerCase()
-        const searchedPosts = savedPosts.filter((post) => post.name.toLowerCase().includes(postName))
+        const name = event.target.value.toLowerCase()
+        const searchedPosts = savedPosts.filter((post) => post.user.toLowerCase().includes(name))
         return filterPosts(searchedPosts)
     }
 
